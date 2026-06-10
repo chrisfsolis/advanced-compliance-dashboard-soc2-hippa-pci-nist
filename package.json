@@ -1,0 +1,17 @@
+{
+  "name": "soc2-sox-enterprise-private-compliance-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Synthetic multi-framework readiness dashboard data model for SOC 2, SOX ITGC, HIPAA, PCI DSS, NIST RMF, and NIST 800-53.",
+  "scripts": {
+    "lint": "npm run claim-safety && node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js && node --check tests/sox-itgc-readiness.test.js",
+    "test": "node --test tests/*.test.js",
+    "build": "node scripts/build-check.js",
+    "typecheck": "node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js",
+    "claim-safety": "node scripts/claim-safety-scan.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

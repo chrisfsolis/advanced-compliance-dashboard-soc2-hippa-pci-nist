@@ -1,0 +1,82 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const test = require('node:test');
+
+const { SOX_BOUNDARY_NOTE, frameworks, frameworkNames } = require('../src/frameworks');
+const { dashboardFrameworkCards, frameworkFilterOptions, frameworkReadinessMetrics, syntheticEvidenceInventory } = require('../src/dashboardData');
+const { soxItgcControls } = require('../src/soxItgcControls');
+
+const repoRoot = path.resolve(__dirname, '..');
+
+test('framework list includes SOX ITGC as the sixth readiness framework', () => {
+  assert.equal(frameworks.length, 6);
+  assert.ok(frameworkNames.includes('SOX ITGC'));
+  assert.ok(frameworks.some((framework) => framework.id === 'sox-itgc' && framework.displayName === 'SOX ITGC Readiness'));
+});
+
+test('synthetic SOX ITGC controls are deterministic and evidence-backed', () => {
+  assert.equal(soxItgcControls.length, 10);
+  assert.deepEqual(
+    soxItgcControls.map((control) => control.id),
+    [
+      'SOX-ITGC-001',
+      'SOX-ITGC-002',
+      'SOX-ITGC-003',
+      'SOX-ITGC-004',
+      'SOX-ITGC-005',
+      'SOX-ITGC-006',
+      'SOX-ITGC-007',
+      'SOX-ITGC-008',
+      'SOX-ITGC-009',
+      'SOX-ITGC-010'
+    ]
+  );
+
+  for (const control of soxItgcControls) {
+    assert.ok(control.domain);
+    assert.ok(control.owner);
+    assert.ok(control.reviewer);
+    assert.ok(control.evidenceExamples.length >= 4);
+  }
+});
+
+test('dashboard data renders SOX ITGC cards, filters, metrics, and evidence inventory', () => {
+  assert.ok(dashboardFrameworkCards.some((card) => card.id === 'sox-itgc' && card.name === 'SOX ITGC'));
+  assert.ok(frameworkFilterOptions.some((option) => option.value === 'sox-itgc' && option.label === 'SOX ITGC'));
+  assert.deepEqual(
+    frameworkReadinessMetrics.find((metric) => metric.frameworkId === 'sox-itgc'),
+    { frameworkId: 'sox-itgc', totalControls: 10, readyControls: 7, needsReview: 2, gaps: 1, readinessPercent: 70, highPriorityFindings: 2 }
+  );
+  assert.equal(syntheticEvidenceInventory.filter((item) => item.frameworkId === 'sox-itgc').length, 10);
+});
+
+test('README and SOX doc include boundary language and SOX ITGC positioning', () => {
+  const readme = fs.readFileSync(path.join(repoRoot, 'README.md'), 'utf8');
+  const soxDoc = fs.readFileSync(path.join(repoRoot, 'docs/sox-itgc-readiness.md'), 'utf8');
+
+  assert.match(readme, /SOX ITGC/);
+  assert.match(readme, /The dashboard models 6 frameworks/);
+  assert.ok(readme.includes(SOX_BOUNDARY_NOTE));
+  assert.ok(soxDoc.includes(SOX_BOUNDARY_NOTE));
+  assert.match(soxDoc, /This project does not determine SOX compliance/);
+});
+
+test('unsafe SOX claims do not appear outside explicit non-claim language', () => {
+  const files = ['README.md', 'docs/sox-itgc-readiness.md', 'src/frameworks.js'];
+  const unsafePhrases = [
+    ['SOX', 'compliant'],
+    ['SOX', 'certified'],
+    ['SOX', 'audit-ready'],
+    ['SOX', 'controls validated'],
+    ['SOX', 'effectiveness proven'],
+    ['public-company', 'ready']
+  ].map((parts) => parts.join(parts[0] === 'public-company' ? '-' : ' '));
+
+  for (const file of files) {
+    const content = fs.readFileSync(path.join(repoRoot, file), 'utf8');
+    for (const phrase of unsafePhrases) {
+      assert.equal(content.includes(phrase), false, `${file} contains ${phrase}`);
+    }
+  }
+});
