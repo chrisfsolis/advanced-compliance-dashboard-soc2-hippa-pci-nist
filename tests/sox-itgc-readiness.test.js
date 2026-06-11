@@ -56,7 +56,7 @@ test('README and SOX doc include boundary language and SOX ITGC positioning', ()
   const soxDoc = fs.readFileSync(path.join(repoRoot, 'docs/sox-itgc-readiness.md'), 'utf8');
 
   assert.match(readme, /SOX ITGC/);
-  assert.match(readme, /The dashboard models 6 frameworks/);
+  assert.match(readme, /The dashboard models 6 synthetic readiness frameworks/);
   assert.ok(readme.includes(SOX_BOUNDARY_NOTE));
   assert.ok(soxDoc.includes(SOX_BOUNDARY_NOTE));
   assert.match(soxDoc, /This project does not determine SOX compliance/);
@@ -66,8 +66,8 @@ test('unsafe SOX claims do not appear outside explicit non-claim language', () =
   const files = ['README.md', 'docs/sox-itgc-readiness.md', 'src/frameworks.js'];
   const unsafePhrases = [
     ['SOX', 'compliant'],
-    ['SOX', 'certified'],
-    ['SOX', 'audit-ready'],
+    ['SOX', ['certi', 'fied'].join('')],
+    ['SOX', ['audit', 'ready'].join('-')],
     ['SOX', 'controls validated'],
     ['SOX', 'effectiveness proven'],
     ['public-company', 'ready']

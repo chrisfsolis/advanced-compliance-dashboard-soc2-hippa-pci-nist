@@ -1,0 +1,33 @@
+version: 1
+kind: synthetic-control-example
+metadata:
+  name: soc2-sox-control-as-code-example
+  description: Synthetic control-as-code example for SOC 2 readiness and SOX ITGC readiness workflows.
+  data_classification: synthetic_demo_only
+  non_claim: Outputs are readiness/demo artifacts, not compliance determinations.
+frameworks:
+  - id: soc2
+    name: SOC 2
+    theme: SOC 2 readiness
+  - id: sox-itgc
+    name: SOX ITGC
+    theme: SOX ITGC readiness
+    boundary: SOX coverage is limited to synthetic ITGC readiness workflows and does not represent SOX compliance, financial audit assurance, or control effectiveness validation.
+control:
+  id: DEMO-ACCESS-001
+  title: Synthetic Access Review Evidence Check
+  objective: Demonstrate a local-first review workflow for synthetic access review evidence metadata.
+  owner: Demo System Owner
+  reviewer: Demo Internal Controls Reviewer
+  frequency: quarterly_demo
+  required_evidence:
+    - access_review_export_placeholder
+    - reviewer_signoff_placeholder
+    - exception_list_placeholder
+    - remediation_note_placeholder
+  readiness_signal:
+    type: advisory
+    allowed_values:
+      - ready
+      - needs_review
+      - gap
