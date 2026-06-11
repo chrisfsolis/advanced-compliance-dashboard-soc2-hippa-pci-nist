@@ -8,6 +8,7 @@ const { soxItgcControls } = require('../src/soxItgcControls');
 const securityProgramData = require('../src/securityProgramData');
 
 const repoRoot = path.resolve(__dirname, '..');
+const windowsInvalidPathChars = /[<>:"|?*]/;
 const knownStrayRootFiles = [
   'PR gate (block merges if critical controls fail):',
   'control evaluation engine (concept)',
@@ -60,6 +61,50 @@ function collectFiles(directory, predicate) {
   }
 
   return files;
+}
+
+function getRepoPathsForPortabilityScan() {
+  const result = run('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard']);
+  return result.stdout.split('\0').filter(Boolean);
+}
+
+function getWindowsPathCompatibilityIssues(repoRelativePaths) {
+  const issues = [];
+
+  for (const repoRelativePath of repoRelativePaths) {
+    const segments = repoRelativePath.split(/[\\/]/);
+    const reasons = [];
+
+    for (const segment of segments) {
+      const invalidCharacters = [...new Set(segment.match(windowsInvalidPathChars) || [])];
+      if (invalidCharacters.length > 0) {
+        reasons.push(`contains Windows-invalid character(s): ${invalidCharacters.join(' ')}`);
+      }
+
+      if (segment.endsWith(' ')) {
+        reasons.push('contains a path segment with a trailing space');
+      }
+
+      if (segment.endsWith('.')) {
+        reasons.push('contains a path segment with a trailing period');
+      }
+    }
+
+    if (reasons.length > 0) {
+      issues.push({
+        path: repoRelativePath,
+        reasons: [...new Set(reasons)]
+      });
+    }
+  }
+
+  return issues;
+}
+
+function checkWindowsPathCompatibility() {
+  const issues = getWindowsPathCompatibilityIssues(getRepoPathsForPortabilityScan());
+  const issueSummary = issues.map((issue) => `${issue.path} (${issue.reasons.join('; ')})`).join(', ');
+  assert(issues.length === 0, `Windows-incompatible repository paths found: ${issueSummary}`);
 }
 
 function checkReadinessData() {
@@ -159,11 +204,23 @@ function checkReadmeLinks() {
   assert(missingLinks.length === 0, `README links point to missing files: ${missingLinks.join(', ')}`);
 }
 
-checkReadinessData();
-checkSecurityProgramDemoData();
-checkRootStrayFiles();
-checkYamlSyntax();
-checkPythonCompilation();
-checkReadmeLinks();
+function runBuildCheck() {
+  checkReadinessData();
+  checkSecurityProgramDemoData();
+  checkRootStrayFiles();
+  checkWindowsPathCompatibility();
+  checkYamlSyntax();
+  checkPythonCompilation();
+  checkReadmeLinks();
 
-console.log('Build data, migration, syntax, and README link checks passed.');
+  console.log('Build data, migration, syntax, Windows path, and README link checks passed.');
+}
+
+if (require.main === module) {
+  runBuildCheck();
+}
+
+module.exports = {
+  getWindowsPathCompatibilityIssues,
+  runBuildCheck
+};

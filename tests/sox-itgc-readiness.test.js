@@ -80,3 +80,34 @@ test('unsafe SOX claims do not appear outside explicit non-claim language', () =
     }
   }
 });
+
+test('Windows path compatibility helper reports invalid characters and trailing segments', () => {
+  const { getWindowsPathCompatibilityIssues } = require('../scripts/build-check');
+  const invalidCharacterPaths = [
+    'PR gate (block merges if critical controls fail):',
+    'docs/invalid<less.md',
+    'docs/invalid>greater.md',
+    'docs/invalid"quote.md',
+    'docs/invalid|pipe.md',
+    'docs/invalid?question.md',
+    'docs/invalid*star.md'
+  ];
+  const trailingSegmentPaths = ['docs/trailing-period.', 'docs/trailing-space '];
+  const issues = getWindowsPathCompatibilityIssues([
+    'docs/safe-note.md',
+    ...invalidCharacterPaths,
+    ...trailingSegmentPaths
+  ]);
+
+  assert.deepEqual(
+    issues.map((issue) => issue.path),
+    [...invalidCharacterPaths, ...trailingSegmentPaths]
+  );
+
+  for (const issue of issues.slice(0, invalidCharacterPaths.length)) {
+    assert.match(issue.reasons.join(' '), /Windows-invalid character/);
+  }
+
+  assert.match(issues.at(-2).reasons.join(' '), /trailing period/);
+  assert.match(issues.at(-1).reasons.join(' '), /trailing space/);
+});
