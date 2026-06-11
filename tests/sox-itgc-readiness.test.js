@@ -81,6 +81,36 @@ test('unsafe SOX claims do not appear outside explicit non-claim language', () =
   }
 });
 
+test('root scratch files are not tracked in the repository', () => {
+  const trackedRootFiles = new Set(
+    require('node:child_process')
+      .execFileSync('git', ['ls-files'], { cwd: repoRoot, encoding: 'utf8' })
+      .split('\n')
+      .filter((file) => file && !file.includes('/'))
+  );
+  const forbiddenRootScratchFiles = [
+    'PR gate (block merges if critical controls fail):',
+    'control evaluation engine (concept)',
+    'control-as-code example (YAML)',
+    'evidence collector example (GitHub)',
+    'nightly compliance & PR Gate',
+    'python skeleton',
+    'structure'
+  ];
+
+  for (const file of forbiddenRootScratchFiles) {
+    assert.equal(trackedRootFiles.has(file), false, `${file} must not be tracked at the repository root`);
+  }
+
+  const allowedExtensionlessRootFiles = new Set(['LICENSE', 'Dockerfile', 'Makefile', 'Procfile']);
+  const extensionlessRootScratchFiles = [...trackedRootFiles]
+    .filter((file) => !file.startsWith('.'))
+    .filter((file) => !file.includes('.'))
+    .filter((file) => !allowedExtensionlessRootFiles.has(file));
+
+  assert.deepEqual(extensionlessRootScratchFiles, []);
+});
+
 test('Windows path compatibility helper reports invalid characters and trailing segments', () => {
   const { getWindowsPathCompatibilityIssues } = require('../scripts/build-check');
   const invalidCharacterPaths = [

@@ -18,6 +18,7 @@ const knownStrayRootFiles = [
   'python skeleton',
   'structure'
 ];
+const allowedExtensionlessRootFiles = new Set(['LICENSE', 'Dockerfile', 'Makefile', 'Procfile']);
 
 function assert(condition, message) {
   if (!condition) {
@@ -165,10 +166,11 @@ function checkRootStrayFiles() {
   const extensionlessNoteFiles = rootEntries
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)
-    .filter((name) => !name.includes('.') && name !== 'LICENSE')
-    .filter((name) => /\s|\(|\)|:|&/.test(name));
+    .filter((name) => !name.startsWith('.'))
+    .filter((name) => !name.includes('.'))
+    .filter((name) => !allowedExtensionlessRootFiles.has(name));
 
-  assert(extensionlessNoteFiles.length === 0, `Extensionless note-like root files remain: ${extensionlessNoteFiles.join(', ')}`);
+  assert(extensionlessNoteFiles.length === 0, `Extensionless root scratch/note files remain: ${extensionlessNoteFiles.join(', ')}`);
 }
 
 function checkYamlSyntax() {
