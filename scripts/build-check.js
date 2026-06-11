@@ -5,6 +5,7 @@ const { spawnSync } = require('node:child_process');
 const { frameworks } = require('../src/frameworks');
 const { dashboardFrameworkCards, frameworkReadinessMetrics, syntheticEvidenceInventory } = require('../src/dashboardData');
 const { soxItgcControls } = require('../src/soxItgcControls');
+const securityProgramData = require('../src/securityProgramData');
 
 const repoRoot = path.resolve(__dirname, '..');
 const knownStrayRootFiles = [
@@ -75,6 +76,42 @@ function checkReadinessData() {
   );
 }
 
+function checkSecurityProgramDemoData() {
+  const allowedStatuses = new Set(['Ready', 'Needs Review', 'Gap', 'Owner Needed', 'In Progress']);
+  const statusCollections = [
+    securityProgramData.overviewCards,
+    securityProgramData.frameworkReadiness.map((item) => ({ status: item.signal })),
+    securityProgramData.programPillars,
+    securityProgramData.vendorRiskQueue.map((item) => ({ status: item.reviewStatus })),
+    securityProgramData.identityAccessControls,
+    securityProgramData.operationalSecurityItems,
+    securityProgramData.bcdrItems,
+    securityProgramData.fraudControls,
+    securityProgramData.aiToolingGovernanceItems,
+    [securityProgramData.selectedControl]
+  ];
+
+  for (const collection of statusCollections) {
+    for (const item of collection) {
+      assert(allowedStatuses.has(item.status), `Unexpected demo status: ${item.status}`);
+    }
+  }
+
+  assert(securityProgramData.overviewCards.length === 6, 'Expected 6 homepage overview cards.');
+  assert(securityProgramData.frameworkReadiness.length === 6, 'Expected 6 framework readiness cards.');
+  assert(securityProgramData.programPillars.length === 9, 'Expected 9 security program pillars.');
+  assert(securityProgramData.vendorRiskQueue.length === 8, 'Expected 8 vendor risk queue items.');
+  assert(securityProgramData.identityAccessControls.length === 8, 'Expected 8 identity and access controls.');
+  assert(securityProgramData.operationalSecurityItems.length === 9, 'Expected 9 operational security loop items.');
+  assert(securityProgramData.bcdrItems.length === 9, 'Expected 9 BCDR readiness items.');
+  assert(securityProgramData.fraudControls.length === 6, 'Expected 6 fraud and funds-transfer controls.');
+  assert(securityProgramData.aiToolingGovernanceItems.length === 7, 'Expected 7 AI tooling governance items.');
+  assert(
+    securityProgramData.soxBoundaryNote.includes('SOX coverage is limited to synthetic ITGC readiness workflows'),
+    'Required SOX boundary note is missing from product demo data.'
+  );
+}
+
 function checkRootStrayFiles() {
   const rootEntries = fs.readdirSync(repoRoot, { withFileTypes: true });
   const knownStraysPresent = knownStrayRootFiles.filter((file) => fs.existsSync(path.join(repoRoot, file)));
@@ -123,6 +160,7 @@ function checkReadmeLinks() {
 }
 
 checkReadinessData();
+checkSecurityProgramDemoData();
 checkRootStrayFiles();
 checkYamlSyntax();
 checkPythonCompilation();

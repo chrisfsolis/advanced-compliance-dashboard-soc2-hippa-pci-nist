@@ -1,19 +1,51 @@
 # soc2-sox-enterprise-private-compliance-platform
 
-A synthetic enterprise compliance automation and readiness platform demonstrating SOC 2 and SOX ITGC control workflows, control-as-code examples, evidence pipeline concepts, and multi-framework readiness dashboard patterns.
+A synthetic security program operations and compliance readiness platform demonstrating control ownership, evidence workflows, vendor risk review, identity/access operations, operational resilience, control-as-code examples, evidence pipeline concepts, and multi-framework readiness dashboard patterns.
 
-This repository provides a demo-oriented GRC command center for synthetic control coverage, evidence completeness, risk scoring, remediation workflows, review support, evidence activity logs, and executive reporting without using real customer data. SOC 2 and SOX ITGC are the primary portfolio themes, while HIPAA, PCI DSS, NIST RMF, and NIST 800-53 remain supported synthetic readiness frameworks.
+This repository provides a demo-oriented GRC command center for synthetic control coverage, evidence completeness, risk scoring, remediation workflows, review support, evidence activity logs, and executive reporting without using real customer data. The product demo UI focuses broadly on security program operations while SOC 2, SOX ITGC, HIPAA, PCI DSS, NIST RMF, and NIST 800-53 remain supported synthetic readiness frameworks.
 
 All data is synthetic. Outputs are readiness/demo artifacts, not compliance determinations.
 
 ## What this project demonstrates
 
-- Synthetic compliance readiness dashboard patterns.
+- Synthetic security program operations dashboard patterns.
+- Product demo UI for framework readiness, control ownership, evidence workflows, vendor risk, identity/access operations, operational resilience, and AI tooling governance.
 - SOC 2 readiness and SOX ITGC readiness workflows.
 - Control-as-code example structure in `controls/`.
 - Evidence pipeline concept notes for local-first demo artifacts.
 - PR gate / control check concepts for safe review workflows.
 - Safe non-claim language for advisory readiness signals.
+
+
+## Product Demo UI
+
+The product demo UI provides a synthetic view of security program operations, including framework readiness, control ownership, evidence workflows, vendor risk, identity/access operations, operational resilience, fraud and funds-transfer review workflows, and AI tooling governance.
+
+Run the local demo with:
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000` to view the default homepage route.
+
+The UI includes:
+
+- A Security Program Operations Dashboard hero and overview cards.
+- Framework readiness across SOC 2, SOX ITGC, HIPAA, PCI DSS, NIST RMF, and NIST 800-53.
+- Security Program Pillars with owners, evidence examples, next actions, friction, and automation opportunities.
+- Vendor Risk Review Queue with synthetic vendor categories, report review status, contract safeguard status, gaps, reviewers, and next actions.
+- Identity & Access Operations for SSO, MFA, access reviews, provisioning, stale accounts, service accounts, and exceptions.
+- Evidence Worth Collecting to distinguish useful operating-practice evidence from low-value documentation.
+- Operational Security Loop, Business Continuity & Disaster Recovery, Fraud and Funds-Transfer Controls, and AI Tooling Governance sections.
+- A reusable Control Detail Panel and Product Demo Path.
+
+All UI data is synthetic and local-demo-oriented. The dashboard uses readiness language only, requires human review, does not determine compliance, and does not validate control effectiveness.
+
+SOX coverage is limited to synthetic ITGC readiness workflows and does not represent SOX compliance, financial audit assurance, or control effectiveness validation.
+
+See [Product Demo Guide](docs/product-demo-guide.md) for the walkthrough and validation commands.
 
 ## Supported readiness frameworks
 
@@ -61,6 +93,7 @@ SOX ITGC is represented as readiness and evidence completeness only. The project
 - [PR gate / control check concept](docs/pr-gate-concept.md)
 - [Repository structure notes](docs/repository-structure-notes.md)
 - [SOX ITGC readiness note](docs/sox-itgc-readiness.md)
+- [Product demo guide](docs/product-demo-guide.md)
 
 Local Python examples are provided for synthetic metadata collection and advisory readiness evaluation:
 
