@@ -4,11 +4,13 @@
   "private": true,
   "description": "Synthetic multi-framework readiness dashboard data model for SOC 2, SOX ITGC, HIPAA, PCI DSS, NIST RMF, and NIST 800-53.",
   "scripts": {
-    "lint": "npm run claim-safety && node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js && node --check scripts/build-check.js && node --check scripts/claim-safety-scan.js && node --check tests/sox-itgc-readiness.test.js",
+    "lint": "npm run claim-safety && node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js && node --check src/interviewDemoData.js && node --check app.js && node --check scripts/dev-server.js && node --check scripts/build-check.js && node --check scripts/claim-safety-scan.js && node --check tests/sox-itgc-readiness.test.js && node --check tests/interview-demo.test.js",
     "test": "node --test tests/*.test.js",
     "build": "node scripts/build-check.js",
-    "typecheck": "node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js && node --check scripts/build-check.js && node --check scripts/claim-safety-scan.js",
-    "claim-safety": "node scripts/claim-safety-scan.js"
+    "typecheck": "node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js && node --check src/interviewDemoData.js && node --check app.js && node --check scripts/dev-server.js && node --check scripts/build-check.js && node --check scripts/claim-safety-scan.js",
+    "claim-safety": "node scripts/claim-safety-scan.js",
+    "dev": "node scripts/dev-server.js",
+    "build-check": "node scripts/build-check.js"
   },
   "engines": {
     "node": ">=18"
