@@ -3,21 +3,27 @@ const path = require('node:path');
 
 const repoRoot = path.resolve(__dirname, '..');
 const ignoredDirectories = new Set(['.git', 'node_modules']);
-const scannedExtensions = new Set(['.md', '.js', '.json']);
+const scannedExtensions = new Set(['.md', '.js', '.json', '.yaml', '.yml', '.py']);
 
 const unsafePhrases = [
-  ['SOX', 'compliant'],
-  ['SOX', 'compliance guaranteed'],
-  ['SOX', 'certified'],
-  ['SOX', 'audit-ready'],
-  ['SOX', 'controls validated'],
-  ['SOX', 'effectiveness proven'],
-  ['financial audit', 'assurance'],
-  ['SOX', 'attestation'],
-  ['PCAOB', 'ready'],
-  ['auditor', 'approved'],
-  ['public-company', 'ready']
-].map((parts) => parts.join(parts[0] === 'PCAOB' || parts[0] === 'public-company' ? '-' : ' '));
+  'SOX compliant',
+  'SOC 2 compliant',
+  'HIPAA compliant',
+  'PCI compliant',
+  'audit-ready',
+  'certified',
+  'attestation',
+  'financial audit assurance',
+  'control effectiveness proven',
+  'guarantees compliance',
+  'guaranteed compliance',
+  'production compliance platform',
+  'SOX controls validated',
+  'SOX effectiveness proven',
+  'PCAOB-ready',
+  'auditor approved',
+  'public-company-ready'
+];
 
 const nonClaimMarkers = [
   'does not',
@@ -27,7 +33,11 @@ const nonClaimMarkers = [
   'non-claims',
   'limited to synthetic',
   'avoid:',
-  'unsafePhrases'
+  'unsafe language',
+  'unsafephrases',
+  'unsafe phrases',
+  'flag or avoid phrases',
+  'confirmation that no'
 ];
 
 function isNonClaim(line) {
@@ -56,26 +66,31 @@ function collectFiles(directory) {
 }
 
 const violations = [];
+const normalizedUnsafePhrases = unsafePhrases.map((phrase) => phrase.toLowerCase());
 
 for (const file of collectFiles(repoRoot)) {
   const relativePath = path.relative(repoRoot, file);
+  if (relativePath === 'scripts/claim-safety-scan.js') {
+    continue;
+  }
   const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/);
 
   lines.forEach((line, index) => {
-    for (const phrase of unsafePhrases) {
-      if (line.includes(phrase) && !isNonClaim(line)) {
-        violations.push(`${relativePath}:${index + 1} contains unsafe claim phrase "${phrase}"`);
+    const normalizedLine = line.toLowerCase();
+    for (let i = 0; i < normalizedUnsafePhrases.length; i += 1) {
+      if (normalizedLine.includes(normalizedUnsafePhrases[i]) && !isNonClaim(line)) {
+        violations.push(`${relativePath}:${index + 1} contains unsafe claim phrase "${unsafePhrases[i]}"`);
       }
     }
   });
 }
 
 if (violations.length > 0) {
-  console.error('Unsafe SOX claim language detected:');
+  console.error('Unsafe claim language detected:');
   for (const violation of violations) {
     console.error(`- ${violation}`);
   }
   process.exit(1);
 }
 
-console.log('SOX claim-safety scan passed.');
+console.log('Claim-safety scan passed.');
