@@ -5,6 +5,7 @@ const { spawnSync } = require('node:child_process');
 const { frameworks } = require('../src/frameworks');
 const { dashboardFrameworkCards, frameworkReadinessMetrics, syntheticEvidenceInventory } = require('../src/dashboardData');
 const { soxItgcControls } = require('../src/soxItgcControls');
+const interviewDemoData = require('../src/interviewDemoData');
 
 const repoRoot = path.resolve(__dirname, '..');
 const knownStrayRootFiles = [
@@ -75,6 +76,35 @@ function checkReadinessData() {
   );
 }
 
+function checkInterviewDemo() {
+  const requiredSections = [
+    'Security Program Scaffolding Demo',
+    'First Six Months: Build the Scaffolding',
+    'Vendor Risk Review Queue',
+    'Identity &amp; Access Automation',
+    'Evidence Worth Collecting',
+    'BCDR and Incident Response Readiness',
+    'Fraud and Funds-Transfer Controls',
+    'AI Tooling and Production AI Threat Model',
+    '5-Minute Demo Path'
+  ];
+
+  const indexHtml = fs.readFileSync(path.join(repoRoot, 'index.html'), 'utf8');
+  for (const section of requiredSections) {
+    assert(indexHtml.includes(section), `Homepage is missing interview demo section: ${section}`);
+  }
+
+  assert(interviewDemoData.demoSummaryCards.length === 6, 'Interview demo summary cards are missing.');
+  assert(interviewDemoData.securityProgramPillars.length === 9, 'Security program pillars are incomplete.');
+  assert(interviewDemoData.vendorRiskItems.length === 8, 'Vendor risk queue must include eight synthetic vendor categories.');
+  assert(interviewDemoData.identityControls.length === 8, 'Identity automation controls are incomplete.');
+  assert(interviewDemoData.bcdrItems.length === 9, 'BCDR and incident response items are incomplete.');
+  assert(interviewDemoData.fraudControls.length === 6, 'Fraud and funds-transfer controls are incomplete.');
+  assert(interviewDemoData.aiThreatModelItems.length === 7, 'AI tooling threat model items are incomplete.');
+  assert(interviewDemoData.evidenceItems.some((item) => item.category === 'useful'), 'Useful evidence examples are missing.');
+  assert(interviewDemoData.evidenceItems.some((item) => item.category === 'busywork'), 'Busywork examples are missing.');
+}
+
 function checkRootStrayFiles() {
   const rootEntries = fs.readdirSync(repoRoot, { withFileTypes: true });
   const knownStraysPresent = knownStrayRootFiles.filter((file) => fs.existsSync(path.join(repoRoot, file)));
@@ -123,6 +153,7 @@ function checkReadmeLinks() {
 }
 
 checkReadinessData();
+checkInterviewDemo();
 checkRootStrayFiles();
 checkYamlSyntax();
 checkPythonCompilation();

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Security Program Scaffolding Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="top-nav" aria-label="Demo sections">
+        <a href="#roadmap-section">Roadmap</a>
+        <a href="#pillars-section">Pillars</a>
+        <a href="#vendor-risk-section">Vendor Risk</a>
+        <a href="#identity-section">Identity</a>
+        <a href="#evidence-section">Evidence</a>
+        <a href="#demo-path-section">5-Minute Demo</a>
+      </nav>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Interview Demo Mode · Small AI Company</p>
+          <h1>Security Program Scaffolding Demo</h1>
+          <p class="hero-subtitle">Synthetic readiness dashboard for building a small AI company’s internal security program across policy, privacy, vendor risk, identity, endpoint management, BCDR, incident response, and evidence workflows.</p>
+          <p class="hero-message">Security program scaffolding that engineers will actually use.</p>
+        </div>
+        <aside class="hero-note" aria-label="Demo safety boundary">
+          <h2>Human Review Required</h2>
+          <p id="safetyDisclaimer">This demo uses synthetic data to illustrate security-program readiness, control ownership, evidence workflows, and review prioritization. It does not determine compliance, audit readiness, legal adequacy, or control operating effectiveness.</p>
+        </aside>
+      </div>
+      <section class="summary-grid" id="summaryCards" aria-label="Security program summary cards"></section>
+    </header>
+
+    <main>
+      <section class="section" id="roadmap-section">
+        <div class="section-heading">
+          <p class="eyebrow">First Six Months</p>
+          <h2>First Six Months: Build the Scaffolding</h2>
+          <p>Start with owners and useful evidence, then formalize identity, vendor, endpoint, recovery, and finance-partnered control loops.</p>
+        </div>
+        <div class="timeline" id="roadmap"></div>
+      </section>
+
+      <section class="section" id="pillars-section">
+        <div class="section-heading">
+          <p class="eyebrow">Internal Security Maturity</p>
+          <h2>Security Program Pillars</h2>
+          <p>Each pillar names status, owner role, maturity signal, next review action, and evidence examples for a research/product team under customer compliance pressure.</p>
+        </div>
+        <div class="pillar-grid" id="pillars"></div>
+      </section>
+
+      <section class="section panel" id="vendor-risk-section">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Vendor Risk Review</p>
+            <h2>Vendor Risk Review Queue</h2>
+            <p>Critical vendor review focuses on scope, complementary user entity controls, subservice organizations, exceptions, and whether the report actually covers the service being used.</p>
+          </div>
+          <aside class="reviewer-note">Reads a SOC 2 report for what matters: scope, CUECs, subservice organizations, exceptions, and actual service coverage.</aside>
+        </div>
+        <div class="queue" id="vendorQueue"></div>
+      </section>
+
+      <section class="section" id="identity-section">
+        <div class="section-heading">
+          <p class="eyebrow">Low-Friction Controls</p>
+          <h2>Identity &amp; Access Automation</h2>
+          <p class="quote">“Controls should be easier to follow than to work around.”</p>
+        </div>
+        <div class="mini-grid" id="identityControls"></div>
+      </section>
+
+      <section class="section panel" id="evidence-section">
+        <div class="section-heading">
+          <p class="eyebrow">Evidence Readiness</p>
+          <h2>Evidence Worth Collecting</h2>
+          <p>The dashboard prioritizes evidence that proves the control is operating, not documentation for its own sake.</p>
+        </div>
+        <div class="evidence-grid" id="evidenceColumns"></div>
+      </section>
+
+      <section class="section" id="bcdr-section">
+        <div class="section-heading">
+          <p class="eyebrow">BCDR Test Readiness</p>
+          <h2>BCDR and Incident Response Readiness</h2>
+          <p>Plans are only counted as ready when there is test evidence or owner sign-off.</p>
+        </div>
+        <div class="mini-grid" id="bcdrItems"></div>
+      </section>
+
+      <section class="section panel" id="fraud-section">
+        <div class="section-heading">
+          <p class="eyebrow">Finance-Partnered Control Readiness</p>
+          <h2>Fraud and Funds-Transfer Controls</h2>
+          <p>Simple controls for dual approval, callback verification, finance access review, payment-change approvals, suspicious request escalation, and audit trail retention.</p>
+        </div>
+        <div class="mini-grid" id="fraudControls"></div>
+      </section>
+
+      <section class="section" id="ai-section">
+        <div class="section-heading">
+          <p class="eyebrow">AI-Assisted Tooling Environment</p>
+          <h2>AI Tooling and Production AI Threat Model</h2>
+          <p>AI-assisted tooling is treated as part of the security operating model, with data-boundary review and human approval for sensitive workflows. This is conceptual and local-demo only; no AI calls are made.</p>
+        </div>
+        <div class="mini-grid" id="aiThreatModel"></div>
+      </section>
+
+      <section class="section demo-path" id="demo-path-section">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">Guided Interview Flow</p>
+            <h2>5-Minute Demo Path</h2>
+            <p>This is synthetic, but it shows the operating model: define owners, automate the boring evidence, reduce friction, and focus on controls people will actually use.</p>
+          </div>
+          <aside class="framework-note" id="frameworkNote"></aside>
+        </div>
+        <ol id="demoPath"></ol>
+      </section>
+    </main>
+
+    <footer>
+      <strong>Demo boundary:</strong> <span id="footerDisclaimer">Synthetic readiness view only. Human review remains required for legal, privacy, audit, customer, and operational decisions.</span>
+    </footer>
+
+    <script src="src/interviewDemoData.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

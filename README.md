@@ -67,6 +67,29 @@ Local Python examples are provided for synthetic metadata collection and advisor
 - `scripts/evidence_collector_example.py`
 - `scripts/control_evaluation_example.py`
 
+
+## Interview Demo Path
+
+The default homepage now opens a guided Security Program Scaffolding Demo for a small AI company. The UI demonstrates practical readiness workflows for policy ownership, privacy review, vendor risk, identity automation, endpoint and asset operations, BCDR testing, incident response, finance-partnered funds-transfer controls, AI tooling guardrails, and evidence collection that avoids busywork.
+
+Run the local demo at `http://localhost:3000`:
+
+```bash
+npm install
+npm run dev
+```
+
+Suggested 5-minute walkthrough:
+
+1. Start with the Security Program Scaffolding overview cards.
+2. Review the First Six Months roadmap.
+3. Open Identity & Access Automation to discuss SSO, MFA, SCIM, stale accounts, and joiner/leaver workflows.
+4. Open Vendor Risk Review Queue to discuss SOC 2 report review scope, CUECs, subservice organizations, exceptions, and service coverage.
+5. Open Evidence Worth Collecting to contrast operating proof with low-value documentation.
+6. Review BCDR, incident response, fraud/funds-transfer controls, and AI tooling threat-model items.
+
+Safety boundary: this demo uses synthetic data to illustrate security-program readiness, control ownership, evidence workflows, and review prioritization. It does not determine compliance, audit readiness, legal adequacy, or control operating effectiveness. SOX ITGC remains supported as one readiness framework, but the interview demo centers small-company security program scaffolding.
+
 ## Validation
 
 Use the included scripts to validate the synthetic framework model, migrated example files, and claim-safety guardrails:
