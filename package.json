@@ -9,6 +9,7 @@
     "build": "node scripts/build-check.js",
     "typecheck": "node --check src/frameworks.js && node --check src/soxItgcControls.js && node --check src/dashboardData.js && node --check src/securityProgramData.js && node --check src/app.js && node --check scripts/dev-server.js && node --check scripts/build-check.js && node --check scripts/claim-safety-scan.js",
     "claim-safety": "node scripts/claim-safety-scan.js",
+    "build-check": "node scripts/build-check.js",
     "dev": "node scripts/dev-server.js"
   },
   "engines": {
